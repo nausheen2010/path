@@ -1,20 +1,20 @@
 stages:
   load_image:
-    cmd: python -c " import load_image; load_image('path/image.jpg')"
+    cmd: python path/image.jpg'
     deps:
       - path/image.jpg
     outs:
       - path/processed_image.jpg
 
   detect_contours:
-    cmd: python -c " import detect_contours; detect_contours('path/processed_image.jpg')"
+    cmd: python path/processed_image.jpg'
     deps:
       - path/processed_image.jpg
     outs:
       - path/contours.pkl
 
   process_image:
-    cmd: python -c " import process_image; process_image('path/processed_image.jpg')"
+    cmd: python path/processed_image.jpg'
     deps:
       - path/processed_image.jpg
     outs:
@@ -22,7 +22,7 @@ stages:
       - path/shop_data_intermediate.pkl
 
   skeletonize_image:
-    cmd: python -c " import skeletonize_image; skeletonize_image('path/processed_image.jpg', 'path/contours_with_data.pkl')"
+    cmd: python 'path/processed_image.jpg', 'path/contours_with_data.pkl'
     deps:
       - path/processed_image.jpg
       - path/contours_with_data.pkl
@@ -30,7 +30,7 @@ stages:
       - path/path_points.pkl
 
   highlight_and_find_max_distance_center_points:
-    cmd: python -c " import highlight_and_find_max_distance_center_points; highlight_and_find_max_distance_center_points('path/contours_with_data.pkl', 'path/path_points.pkl')"
+    cmd: python 'path/contours_with_data.pkl', 'path/path_points.pkl'
     deps:
       - path/contours_with_data.pkl
       - path/path_points.pkl
@@ -39,7 +39,7 @@ stages:
       - path/shop_data_final.pkl
 
   filter_end_path_points:
-    cmd: python -c " import filter_end_path_points; filter_end_path_points('path/path_points.pkl')"
+    cmd: python path/path_points.pkl'
     deps:
       - path/path_points.pkl
     outs:
@@ -47,14 +47,14 @@ stages:
       - path/remaining_path_points.pkl
 
   reduce_path_points:
-    cmd: python -c " import reduce_path_points; reduce_path_points('path/remaining_path_points.pkl')"
+    cmd: python path/remaining_path_points.pkl
     deps:
       - path/remaining_path_points.pkl
     outs:
       - path/final_path_points.pkl
 
   save_data:
-    cmd: python -c " import save_data; save_data('path/final_path_points.pkl', 'path/shop_data_final.pkl')"
+    cmd: python 'path/final_path_points.pkl', 'path/shop_data_final.pkl'
     deps:
       - path/final_path_points.pkl
       - path/shop_data_final.pkl
