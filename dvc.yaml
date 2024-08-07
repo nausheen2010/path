@@ -1,64 +1,52 @@
 stages:
-  load_image:
-    cmd: python path/image.jpg'
-    deps:
-      - path/image.jpg
-    outs:
-      - path/processed_image.jpg
-
   detect_contours:
-    cmd: python path/processed_image.jpg'
+    cmd: python g_test4.py detect_contours
     deps:
-      - path/processed_image.jpg
+      - path/SHOW.jpg
     outs:
-      - path/contours.pkl
+      - path/contours_data.pkl
 
   process_image:
-    cmd: python path/processed_image.jpg'
+    cmd: python g_test4.py process_image
     deps:
-      - path/processed_image.jpg
+      - path/contours_data.pkl
     outs:
       - path/contours_with_data.pkl
-      - path/shop_data_intermediate.pkl
+      - path/shop_data.pkl
 
   skeletonize_image:
-    cmd: python 'path/processed_image.jpg', 'path/contours_with_data.pkl'
+    cmd: python g_test4.py skeletonize_image
     deps:
-      - path/processed_image.jpg
       - path/contours_with_data.pkl
     outs:
-      - path/path_points.pkl
+      - path/path_points.npy
 
   highlight_and_find_max_distance_center_points:
-    cmd: python 'path/contours_with_data.pkl', 'path/path_points.pkl'
+    cmd: python g_test4.py highlight_and_find_max_distance_center_points
     deps:
+      - path/path_points.npy
       - path/contours_with_data.pkl
-      - path/path_points.pkl
     outs:
       - path/shop_points.pkl
-      - path/shop_data_final.pkl
+      - path/shop_data_detailed.pkl
 
   filter_end_path_points:
-    cmd: python path/path_points.pkl'
+    cmd: python g_test4.py filter_end_path_points
     deps:
-      - path/path_points.pkl
+      - path/path_points.npy
     outs:
-      - path/filtered_path_points.pkl
-      - path/remaining_path_points.pkl
+      - path/filtered_path_points.npy
 
   reduce_path_points:
-    cmd: python path/remaining_path_points.pkl
+    cmd: python g_test4.py reduce_path_points
     deps:
-      - path/remaining_path_points.pkl
+      - path/filtered_path_points.npy
     outs:
-      - path/final_path_points.pkl
+      - path/final_path_points.npy
 
-  save_data:
-    cmd: python 'path/final_path_points.pkl', 'path/shop_data_final.pkl'
+  calculate_shop_distance_matrix:
+    cmd: python g_test4.py calculate_shop_distance_matrix
     deps:
-      - path/final_path_points.pkl
-      - path/shop_data_final.pkl
+      - path/shop_data_detailed.pkl
     outs:
-      - path/final_path_points.xlsx
-      - path/cordshop.xlsx
       - path/shop_distance_matrix.xlsx

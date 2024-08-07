@@ -8,6 +8,7 @@ import re
 from skimage.morphology import skeletonize
 from sklearn.cluster import KMeans
 from scipy.spatial import distance_matrix
+import argparse
 
 # Global variables to store state
 contours = []
@@ -390,6 +391,42 @@ def main():
     shop_distance_df.to_excel(r'C:\projects\super_admin\shop_distance_matrix3.xlsx')
 
     print("Data saved successfully.")
+
+
+    parser = argparse.ArgumentParser(description='Run image processing stages.')
+    parser.add_argument('stage', choices=[
+        'detect_contours',
+        'process_image',
+        'skeletonize_image',
+        'highlight_and_find_max_distance_center_points',
+        'filter_end_path_points',
+        'reduce_path_points',
+        'calculate_shop_distance_matrix'
+    ], help='Stage to run')
+
+    args = parser.parse_args()
+
+    if args.stage == 'detect_contours':
+        # Add the logic to save contours data
+        pass
+    elif args.stage == 'process_image':
+        # Add the logic to process image and save contours_with_data and shop_data
+        pass
+    elif args.stage == 'skeletonize_image':
+        # Add the logic to skeletonize image and save path_points
+        pass
+    elif args.stage == 'highlight_and_find_max_distance_center_points':
+        # Add the logic to highlight and find max distance center points and save shop_points and shop_data_detailed
+        pass
+    elif args.stage == 'filter_end_path_points':
+        # Add the logic to filter end path points and save filtered_path_points
+        pass
+    elif args.stage == 'reduce_path_points':
+        # Add the logic to reduce path points and save final_path_points
+        pass
+    elif args.stage == 'calculate_shop_distance_matrix':
+        # Add the logic to calculate shop distance matrix and save shop_distance_matrix
+        pass
 
 if __name__ == "__main__":
     main()
