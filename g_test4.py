@@ -332,7 +332,7 @@ def main():
     global final_contours, current_contours, history
 
     # Path to the input image
-    image_path = r'C:\Users\naush\Downloads\path\SHOW.jpg'
+    image_path = r'C:\Users\naush\Downloads\path\path\SHOW.jpg'
     image = load_image(image_path)
 
     detect_contours(image)
