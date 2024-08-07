@@ -1,52 +1,63 @@
 stages:
   detect_contours:
-    cmd: python g_test4.py detect_contours
+    cmd: python path/g_test4.py --stage detect_contours
     deps:
-      - path/SHOW.jpg
+    - path/image.npy
     outs:
-      - path/contours_data.pkl
+    - path/outer_contours.npy
+    - path/first_level_contours.npy
+    - path/filtered_contours_data.pkl
 
   process_image:
-    cmd: python g_test4.py process_image
+    cmd: python path/g_test4.py --stage process_image
     deps:
-      - path/contours_data.pkl
+    - path/outer_contours.npy
+    - path/first_level_contours.npy
     outs:
-      - path/contours_with_data.pkl
-      - path/shop_data.pkl
+    - path/contours_with_data.pkl
+    - path/shop_data.pkl
+    - path/skeleton_contours_with_data.pkl
 
   skeletonize_image:
-    cmd: python g_test4.py skeletonize_image
+    cmd: python path/g_test4.py --stage skeletonize_image
     deps:
-      - path/contours_with_data.pkl
+    - path/image.npy
+    - path/skeleton_contours_with_data.pkl
     outs:
-      - path/path_points.npy
+    - path/path_points.npy
 
-  highlight_and_find_max_distance_center_points:
-    cmd: python g_test4.py highlight_and_find_max_distance_center_points
+  filter_path_points:
+    cmd: python path/g_test4.py --stage filter_path_points
     deps:
-      - path/path_points.npy
-      - path/contours_with_data.pkl
+    - path/path_points.npy
+    - path/image.npy
     outs:
-      - path/shop_points.pkl
-      - path/shop_data_detailed.pkl
-
-  filter_end_path_points:
-    cmd: python g_test4.py filter_end_path_points
-    deps:
-      - path/path_points.npy
-    outs:
-      - path/filtered_path_points.npy
+    - path/filtered_path_points.npy
+    - path/remaining_path_points.npy
 
   reduce_path_points:
-    cmd: python g_test4.py reduce_path_points
+    cmd: python path/g_test4.py --stage reduce_path_points
     deps:
-      - path/filtered_path_points.npy
+    - path/remaining_path_points.npy
     outs:
-      - path/final_path_points.npy
+    - path/final_path_points.npy
 
-  calculate_shop_distance_matrix:
-    cmd: python g_test4.py calculate_shop_distance_matrix
+  highlight_and_find_max_distance_center_points:
+    cmd: python path/g_test4.py --stage highlight_and_find_max_distance_center_points
     deps:
-      - path/shop_data_detailed.pkl
+    - path/contours_with_data.pkl
+    - path/remaining_path_points.npy
     outs:
-      - path/shop_distance_matrix.xlsx
+    - path/shop_points.pkl
+    - path/detailed_shop_data.pkl
+    - path/shop_names.pkl
+
+  save_results:
+    cmd: python path/g_test4.py --stage save_results
+    deps:
+    - path/final_path_points.npy
+    - path/detailed_shop_data.pkl
+    outs:
+    - path/final_path_points.xlsx
+    - path/cordshop1.xlsx
+    - path/shop_distance_matrix.xlsx
